@@ -1,0 +1,141 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "A dimension table containing customer information."
+    columns:
+      - name: customer_id
+        description: "The unique identifier for each customer."
+        tests:
+          - unique
+          - not_null
+      - name: customer_first_name
+        description: "The customer's first name."
+      - name: customer_last_name
+        description: "The customer's last name."
+      - name: customer_full_name
+        description: "The customer's full name, a combination of first and last name."
+      - name: customer_email
+        description: "The customer's email address."
+      - name: customer_city
+        description: "The city where the customer is located."
+      - name: customer_state
+        description: "The state where the customer is located."
+      - name: created_at
+        description: "The timestamp when the customer record was created."
+      - name: updated_at
+        description: "The timestamp when the customer record was last updated."  
+
+  - name: dim_dates
+    description: "A dimension table containing date information."
+    columns:
+      - name: date_key
+        description: "The unique identifier for each date."
+        tests:
+          - unique
+          - not_null
+      - name: date_value
+        description: "The actual date value."
+      - name: year
+        description: "The year of the date."
+      - name: month
+        description: "The month of the year."
+      - name: day_of_week_number
+        description: "The day of the week as a number."
+      - name: day_of_week
+        description: "The day of the week as a name (e.g., 'Monday')."
+      - name: is_weekend
+        description: "A boolean indicating if the date is a weekend."
+
+  - name: dim_products
+    description: "A dimension table containing product information."
+    columns:
+      - name: product_id
+        description: "The unique identifier for each product."
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "The name of the product."
+      - name: product_category
+        description: "The category of the product."
+      - name: product_brand
+        description: "The brand of the product."
+      - name: product_cost
+        description: "The cost of the product."
+      - name: supplier_name
+        description: "The name of the product's supplier."
+      - name: created_at
+        description: "The timestamp when the product record was created."
+      - name: updated_at
+        description: "The timestamp when the product record was last updated."
+
+  - name: dim_stores
+    description: "A dimension table containing store information."
+    columns:
+      - name: store_id
+        description: "The unique identifier for each store."
+        tests:
+          - unique
+          - not_null
+      - name: store_name
+        description: "The name of the store."
+      - name: store_address
+        description: "The physical address of the store."
+      - name: store_city
+        description: "The city where the store is located."
+      - name: store_region
+        description: "The region where the store is located."
+
+  - name: fct_sales
+    description: "A fact table containing sales metrics and foreign keys to all dimension tables."
+    columns:
+      - name: order_line_id 
+        description: "The unique identifier for each order."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "The foreign key to the dim_customers table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: store_id
+        description: "The foreign key to the dim_stores table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_stores')
+                field: store_id
+      - name: product_id
+        description: "The foreign key to the dim_products table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+      - name: date_key
+        description: "The foreign key to the dim_dates table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_dates')
+                field: date_key
+      - name: quantity
+        description: "The quantity of the product sold."
+      - name: unit_price
+        description: "The price per unit of the product."
+      - name: discount_amount
+        description: "The amount of discount applied."
+      - name: shipping_cost
+        description: "The cost of shipping for the order."
+      - name: gross_sales_amount
+        description: "The total sales amount before discounts."
+      - name: net_sales_amount
+        description: "The total sales amount after discounts."

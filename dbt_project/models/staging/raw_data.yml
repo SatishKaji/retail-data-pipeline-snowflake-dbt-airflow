@@ -1,0 +1,47 @@
+
+version: 2
+
+sources:
+  - name: RETAIL_DB
+    schema: RAW_DATA
+    description: "Raw data from the retail project source systems."
+    tables:
+      - name: orders
+        description: "Raw data for customer orders."
+        columns:
+          - name: order_id
+            tests:
+              - not_null
+              - unique
+
+      - name: order_items
+        description: "Raw data for items within each order."
+        columns:
+          - name: order_line_id
+            tests:
+              - not_null
+              - unique
+
+      - name: products
+        description: "Raw data for products, including names and brands."
+        columns:
+          - name: product_id
+            tests:
+              - not_null
+              - unique
+
+      - name: customers
+        description: "Raw data for customer information."
+        columns:
+          - name: customer_id
+            tests:
+              - not_null
+              - unique
+
+      - name: stores
+        description: "Raw data for store locations."
+        columns:
+          - name: store_id
+            tests:
+              - not_null
+              - unique

@@ -1,0 +1,133 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Staging table for customers, with cleaned and standardized data."
+    columns:
+      - name: customer_id
+        description: "The unique identifier for each customer."
+        tests:
+          - unique
+          - not_null
+      - name: customer_first_name
+        description: "The customer's first name."
+      - name: customer_last_name
+        description: "The customer's last name."
+      - name: customer_email
+        description: "The customer's unique email address."
+        tests:
+          - unique
+      - name: customer_city
+        description: "The city where the customer is located."
+      - name: customer_state
+        description: "The state where the customer is located."
+      - name: created_at
+        description: "The timestamp when the customer record was created."
+      - name: updated_at
+        description: "The timestamp when the customer record was last updated."
+
+  - name: stg_order_items
+    description: "Staging table for order items, containing granular sales data."
+    columns:
+      - name: order_line_id
+        description: "The unique identifier for each line item within an order."
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "The foreign key to the stg_orders table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+      - name: product_id
+        description: "The foreign key to the stg_products table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: product_id
+      - name: quantity
+        description: "The quantity of the product sold."
+      - name: unit_price
+        description: "The price per unit of the product."
+      - name: discount_amount
+        description: "The amount of discount applied to the item."
+      - name: gross_sales_amount
+        description: "The total sales amount before discounts."
+      - name: net_sales_amount
+        description: "The total sales amount after discounts."
+
+  - name: stg_orders
+    description: "Staging table for orders, with cleaned and standardized data."
+    columns:
+      - name: order_id
+        description: "The unique identifier for each order."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "The foreign key to the stg_customers table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+      - name: store_id
+        description: "The foreign key to the stg_stores table."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_stores')
+                field: store_id
+      - name: order_date
+        description: "The date the order was placed."
+      - name: shipping_cost
+        description: "The cost of shipping for the order."
+      - name: is_online_order
+        description: "A boolean indicating if the order was placed online."
+
+  - name: stg_products
+    description: "Staging table for products, with cleaned and standardized data."
+    columns:
+      - name: product_id
+        description: "The unique identifier for each product."
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: "The name of the product."
+      - name: product_category
+        description: "The category of the product."
+      - name: product_brand
+        description: "The brand of the product."
+      - name: product_cost
+        description: "The cost of the product."
+      - name: supplier_name
+        description: "The name of the product's supplier."
+      - name: created_at
+        description: "The timestamp when the product record was created."
+      - name: updated_at
+        description: "The timestamp when the product record was last updated."
+
+  - name: stg_stores
+    description: "Staging table for stores, with cleaned and standardized data."
+    columns:
+      - name: store_id
+        description: "The unique identifier for each store."
+        tests:
+          - unique
+          - not_null
+      - name: store_name
+        description: "The name of the store."
+      - name: store_address
+        description: "The physical address of the store."
+      - name: store_city
+        description: "The city where the store is located."
+      - name: store_region
+        description: "The region where the store is located."
