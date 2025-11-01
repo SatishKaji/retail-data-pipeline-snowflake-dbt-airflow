@@ -9,7 +9,6 @@ x-airflow-common:
     dockerfile: Dockerfile
   
   environment:
-    AIRFLOW_UID: 50000
     AIRFLOW_HOME: /opt/airflow
     AIRFLOW_WEBSERVER_HOST: 0.0.0.0
     AIRFLOW_WEBSERVER_PORT: 8080
